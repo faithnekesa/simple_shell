@@ -19,7 +19,7 @@ char **get_environ(info_t *info)
 /**
  * unsetEnv -Removes an environment variable
  * @info:Used to maintain constant function prototype
- * @c=var: the string environment variable
+ * @var: the string environment variable
  * Return: 1 on delete, 0 otherwise
  */
 int unsetEnv(info_t *info, char *var)
