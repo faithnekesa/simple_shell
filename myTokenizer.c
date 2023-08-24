@@ -1,96 +1,94 @@
 #include "shell.h"
 
 /**
- * **myStrtok -A function that splits a string into words
- * @str: the string input being split
- * @d:The string delimeter
- * Return:An array string pointer, NULL on failure
+ * **strtow - splits a string into words and ignores repeated delimiters
+ * @str: the input string
+ * @d: the delimeter string
+ * Return: a pointer to an array of strings or NULL on failure
  */
 
-char **myStrtok(char *str, char *d)
+char **strtow(char *str, char *d)
 {
-	int counter, counter2, counter3, counter4, wordNum = 0;
+	int i, j, k, m, numwords = 0;
 	char **s;
 
 	if (str == NULL || str[0] == 0)
 		return (NULL);
 	if (!d)
 		d = " ";
-	for (counter = 0; str[counter] != '\0'; counter++)
-		if (!is_delim(str[counter], d) && (is_delim(str[counter + 1],
-						d) || !str[counter + 1]))
-			wordNum++;
+	for (i = 0; str[i] != '\0'; i++)
+		if (!isDelim(str[i], d) && (isDelim(str[i + 1], d) || !str[i + 1]))
+			numwords++;
 
-	if (wordNum == 0)
+	if (numwords == 0)
 		return (NULL);
-	s = malloc((1 + wordNum) * sizeof(char *));
+	s = malloc((1 + numwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
-	for (counter = 0, counter2 = 0; counter2 < wordNum; counter2++)
+	for (i = 0, j = 0; j < numwords; j++)
 	{
-		while (is_delim(str[counter], d))
-			counter++;
-		counter3 = 0;
-		while (!is_delim(str[counter + counter3], d) && str[counter + counter3])
-			counter3++;
-		s[counter2] = malloc((counter3 + 1) * sizeof(char));
-		if (!s[counter2])
+		while (isDelim(str[i], d))
+			i++;
+		k = 0;
+		while (!isDelim(str[i + k], d) && str[i + k])
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
 		{
-			for (counter3 = 0; counter3 < counter2; counter3++)
-				free(s[counter3]);
+			for (k = 0; k < j; k++)
+				free(s[k]);
 			free(s);
 			return (NULL);
 		}
-		for (counter4 = 0; counter4 < counter3; counter4++)
-			s[counter2][counter4] = str[counter++];
-		s[counter2][counter4] = 0;
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = 0;
 	}
-	s[counter2] = NULL;
+	s[j] = NULL;
 	return (s);
 }
 
 /**
- * **myStrtok2 -A function that splits a string into words
- * @str: the string input being split
- * @d:The string delimeter
- * Return:An array string pointer, NULL on failure
+ * **strtow2 - splits a string into words
+ * @str: the input string
+ * @d: the delimeter
+ * Return: a pointer to an array of strings or NULL on failure
  */
-char **myStrtok2(char *str, char d)
+char **strtow2(char *str, char d)
 {
-	int counter, counter2, counter3, counter4, wordNum = 0;
+	int i, j, k, m, numwords = 0;
 	char **s;
 
 	if (str == NULL || str[0] == 0)
 		return (NULL);
-	for (counter = 0; str[counter] != '\0'; counter++)
-		if ((str[counter] != d && str[counter + 1] == d) ||
-				    (str[counter] != d && !str[counter + 1]) || str[counter + 1] == d)
-			wordNum++;
-	if (wordNum == 0)
+	for (i = 0; str[i] != '\0'; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+		    (str[i] != d && !str[i + 1]) || str[i + 1] == d)
+			numwords++;
+	if (numwords == 0)
 		return (NULL);
-	s = malloc((1 + wordNum) * sizeof(char *));
+	s = malloc((1 + numwords) * sizeof(char *));
 	if (!s)
 		return (NULL);
-	for (counter = 0, counter2 = 0; counter2 < wordNum; counter2++)
+	for (i = 0, j = 0; j < numwords; j++)
 	{
-		while (str[counter] == d && str[counter] != d)
-			counter++;
-		counter3 = 0;
-		while (str[counter + counter3] != d && str[counter + counter3] &&
-				str[counter + counter3] != d)
-			counter3++;
-		s[counter2] = malloc((counter3 + 1) * sizeof(char));
-		if (!s[counter2])
+		while (str[i] == d && str[i] != d)
+			i++;
+		k = 0;
+		while (str[i + k] != d && str[i + k] && str[i + k] != d)
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
 		{
-			for (counter3 = 0; counter3 < counter2; counter3++)
-				free(s[counter3]);
+			for (k = 0; k < j; k++)
+				free(s[k]);
 			free(s);
 			return (NULL);
 		}
-		for (counter4 = 0; counter4 < counter3; counter4++)
-			s[counter2][counter4] = str[counter++];
-		s[counter2][counter4] = 0;
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = 0;
 	}
-	s[counter2] = NULL;
+	s[j] = NULL;
 	return (s);
 }

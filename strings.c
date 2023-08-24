@@ -1,94 +1,72 @@
 #include "shell.h"
 
 /**
- * is_alpha - checks for characters that are alphabets
- * @c: character to be treated
- *
- * Return: 1 if alphabetic, 0 otherwise.
+ * myStrlen - returns the length of a string
+ * @s: the string whose length to check
+ * Return: integer length of string
  */
-int is_alpha(int c)
+int myStrlen(char *s)
 {
-	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-	{
-		return (1);
-	}
-	else
-	{
+	int i = 0;
+
+	if (!s)
 		return (0);
-	}
+
+	while (*s++)
+		i++;
+	return (i);
 }
 
 /**
- * is_delim - checks for characters that are delimeters
- * @c: character to be checked
- * @str: delimeter string
- *
- * Return: 1 if true, 0 if false.
+ * myStrcmp -A function that performs lexicogarphic
+ * comparison of two strangs.
+ * @s1: the first strang
+ * @s2: the second strang
+ * Return: negative if s1 < s2, positive if s1 > s2, zero if s1 == s2
  */
-int is_delim(char c, char *str)
+int myStrcmp(char *s1, char *s2)
 {
-	while (*str)
+	while (*s1 && *s2)
 	{
-		if (*str++ == c)
-		{
-			return (1);
-		}
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
 	}
-	return (0);
-}
-
-/**
- * _atoi - converts a srting to an integer
- * @s: string to be converted
- *
- * Return: integer of the string
- */
-int _atoi(char *s)
-{
-	int minus = 1;
-	int flag = 0;
-	int output;
-	int index = 0;
-	unsigned int result = 0;
-
-	while (s[index] != '\0' && flag != 2)
-	{
-		if (s[index] == '-')
-			minus *= -1;
-		else if (s[index] >= '0' && s[index] <= '9')
-		{
-			flag = 1;
-			result *= 10;
-			result += (s[index] - '0');
-		}
-		else if (flag == 1)
-			flag = 2;
-		index++;
-	}
-	if (minus == -1)
-		output = -result;
+	if (*s1 == *s2)
+		return (0);
 	else
-		output = result;
-	return (output);
+		return (*s1 < *s2 ? -1 : 1);
 }
-/**
- * *_strcpy - copies a string
- * @dest: the destination
- * @src: the source
- *
- * Return: pointer to destination
- */
-char *_strcpy(char *dest, char *src)
-{
-	int index = 0;
 
-	if (dest == src || src == 0)
-		return (dest);
-	while (src[index])
-	{
-		dest[index] = src[index];
-		index++;
-	}
-	dest[index] = 0;
-	return (dest);
+/**
+ * startsWith - checks if needle starts with haystack
+ * @haystack: string to search
+ * @needle: the substring to find
+ * Return: address of next char of haystack or NULL
+ */
+char *startsWith(const char *haystack, const char *needle)
+{
+	while (*needle)
+		if (*needle++ != *haystack++)
+			return (NULL);
+	return ((char *)haystack);
+}
+
+/**
+ * myStrcat - concatenates two strings
+ * @dest: the destination buffer
+ * @src: the source buffer
+ * Return: pointer to destination buffer
+ */
+char *myStrcat(char *dest, char *src)
+{
+	char *ret = dest;
+
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }

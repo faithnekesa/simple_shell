@@ -1,97 +1,97 @@
 #include "shell.h"
 
 /**
- * myChangeDir -A function that changes the
- * current directory of the process
- * @info:Struct to hold the arguments that will be
- * keyed in terminal
- * Return:0 always
+ * myExit - exits the shell
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ *  Return: exits with a given exit status
+ *         (0) if info.argv[0] != "exit"
  */
-int myChangeDir(info_t *info)
+int myExit(info_t *info)
 {
-	char *newstr, *dir, buffer[1024];
+	int exitcheck;
+
+	if (info->argv[1])
+	{
+		exitcheck = myErratoi(info->argv[1]);
+		if (exitcheck == -1)
+		{
+			info->status = 2;
+			print_error(info, "Illegal number: ");
+			myEputs(info->argv[1]);
+			myEputchar('\n');
+			return (1);
+		}
+		info->err_num = myErratoi(info->argv[1]);
+		return (-2);
+	}
+	info->err_num = -1;
+	return (-2);
+}
+
+/**
+ * myCd - changes the current directory of the process
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ *  Return: Always 0
+ */
+int myCd(info_t *info)
+{
+	char *s, *dir, buffer[1024];
 	int chdir_ret;
 
-	newstr = getcwd(buffer, 1024);
-	if (!newstr)
+	s = getcwd(buffer, 1024);
+	if (!s)
 		myPuts("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
-		dir = mygetEnv(info, "HOME=");
+		dir = getEnv(info, "HOME=");
 		if (!dir)
 			chdir_ret =
-				chdir((dir = mygetEnv(info, "PWD=")) ? dir : "/");
+			chdir((dir = getEnv(info, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
 	}
-	else if (_strcmp(info->argv[1], "-") == 0)
+	else if (myStrcmp(info->argv[1], "-") == 0)
 	{
-		if (!mygetEnv(info, "OLDPWD="))
+		if (!getEnv(info, "OLDPWD="))
 		{
-			myPuts(newstr);
+			myPuts(s);
 			myPutchar('\n');
 			return (1);
 		}
-		myPuts(mygetEnv(info, "OLDPWD=")), myPutchar('\n');
+		myPuts(getEnv(info, "OLDPWD=")), myPutchar('\n');
 		chdir_ret =
-			chdir((dir = mygetEnv(info, "OLDPWD=")) ? dir : "/");
+			chdir((dir = getEnv(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
 		chdir_ret = chdir(info->argv[1]);
 	if (chdir_ret == -1)
 	{
-		printError(info, "can't cd to ");
-		putsError(info->argv[1]), putcharError('\n');
+		print_error(info, "can't cd to ");
+		myEputs(info->argv[1]), myEputchar('\n');
 	}
 	else
 	{
-		_myset_env(info, "OLDPWD", mygetEnv(info, "PWD="));
-		_myset_env(info, "PWD", getcwd(buffer, 1024));
+		setEnv(info, "OLDPWD", getEnv(info, "PWD="));
+		setEnv(info, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
 
 /**
- * myExit -A function that exits the shell
- * @info:Struct to hold the arguments that will be
- * keyed in terminal
- * Return: 0 if info.argv[0] is not equal to exit
- */
-int myExit(info_t *info)
-{
-	int checkExit;
-
-	if (info->argv[1])
-	{
-		checkExit = atoiError(info->argv[1]);
-		if (checkExit == -1)
-		{
-			info->commandStatus = 2;
-			printError(info, "Illegal number: ");
-			putsError(info->argv[1]);
-			putcharError('\n');
-			return (1);
-		}
-		info->errorCode = atoiError(info->argv[1]);
-		return (-2);
-	}
-	info->errorCode = -1;
-	return (-2);
-}
-
-/**
- * myHelp -A function that hanges the current directory of a process
- * @info:Struct to hold the arguments that will be
- * keyed in terminal
- * Return: Always 0
+ * myHelp - changes the current directory of the process
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ *  Return: Always 0
  */
 int myHelp(info_t *info)
 {
-	char **arrayArg;
+	char **arg_array;
 
-	arrayArg = info->argv;
+	arg_array = info->argv;
 	myPuts("help call works. Function not yet implemented \n");
 	if (0)
-		myPuts(*arrayArg);
+		myPuts(*arg_array);
 	return (0);
 }
