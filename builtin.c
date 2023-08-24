@@ -1,6 +1,8 @@
 #include "shell.h"
+
 /**
- * myChangeDir -A function that changes the current directory of the process
+ * myChangeDir -A function that changes the
+ * current directory of the process
  * @info:Struct to hold the arguments that will be
  * keyed in terminal
  * Return:0 always
